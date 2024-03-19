@@ -14,5 +14,6 @@
 <body>
 <h1>Welcome to SnackerRank</h1>
 <small>The ultimate snack ranking website ever made</small>
+<?php require_once('search_form.php') ?>
 </body>
 </html>
