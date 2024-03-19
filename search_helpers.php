@@ -9,21 +9,31 @@
 
 require_once('db_connect.php');
 
-function exec_search(string $search_text, int $category_id): ?array
+function exec_search(?string $search_text, ?int $category_id, int $limit = 10): ?array
 {
     global $db;
-    $qs_part1 = "SELECT s.id, s.snack_name, s.snack_description, s.category_id, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id";
 
-    if (strlen($search_text) > 0 && !empty($category_id)) {
-        $filter_condition = ' WHERE category_id = :category_id AND snack_name LIKE :search_text OR snack_description LIKE :search_text';
+    if ($limit < 5) $limit = 5;
+
+    if (!is_null($search_text) && is_null($category_id)) {
+        $query_string = "SELECT s.id, s.snack_name, s.snack_description, s.category_id, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id WHERE category_id = :category_id AND snack_name LIKE :search_text OR snack_description LIKE :search_text ORDER BY s.snack_name LIMIT :limit";
+        $statement = $db->prepare($query_string);
+        $statement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
+        $statement->bindValue(':search_text', '%'. $search_text . '%');
+    } elseif (!is_null($search_text) && is_null($category_id)) {
+        $query_string = "SELECT s.id, s.snack_name, s.snack_description, s.category_id, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id WHERE snack_name LIKE :search_text OR snack_description LIKE :search_text ORDER BY s.snack_name LIMIT :limit";
+        $statement = $db->prepare($query_string);
+        $statement->bindValue(':search_text', '%'. $search_text . '%');
+    } elseif (!is_null($category_id) && is_null($search_text)) {
+        $query_string = "SELECT s.id, s.snack_name, s.snack_description, s.category_id, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id WHERE category_id = :category_id ORDER BY s.snack_name LIMIT :limit";
+        $statement = $db->prepare($query_string);
+        $statement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
     } else {
-        $filter_condition = ' WHERE category_id = :category_id OR snack_name LIKE :search_text OR snack_description LIKE :search_text';
+        $query_string = "SELECT s.id, s.snack_name, s.snack_description, s.category_id, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id ORDER BY s.snack_name LIMIT :limit";
+        $statement = $db->prepare($query_string);
     }
-    $qs_sort = " ORDER BY s.snack_name";
-    $query_string = $qs_part1 . $filter_condition . $qs_sort;
-    $statement = $db->prepare($query_string);
-    $statement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
-    $statement->bindValue(':search_text', '%'. $search_text . '%');
+
+    $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
     $statement->execute();
     return $statement->fetchAll();
 }
