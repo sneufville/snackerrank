@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 if (isset($_SESSION) && !is_null($_SESSION['current_user'])) {
     $_SESSION = [];

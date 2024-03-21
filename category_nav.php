@@ -7,6 +7,7 @@ $categories = get_categories();
 ?>
 
 <div>
+  <p>Snack Search Quick Category Links</p>
     <?php if (!is_null($categories)): ?>
     <ul>
         <li>

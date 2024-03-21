@@ -24,11 +24,11 @@ $limit = filter_input(INPUT_GET, 'result_limit', FILTER_VALIDATE_INT);
 
 <form action="search.php" class="searchForm" method="get">
   <div>
-    <label for="searchInput"></label>
-    <input id="searchInput" name="search_input" placeholder="Search" type="text" value="<?= $search_input ?>" />
+    <label for="searchInput">Keyword</label><br>
+    <input id="searchInput" name="search_input" placeholder="Search br keywords" type="text" value="<?= $search_input ?>" />
   </div>
   <div>
-    <label for="snackCategory">Snack Category</label>
+    <label for="snackCategory">Snack Category</label><br>
     <select id="snackCategory" name="snack_category">
         <option value="">-- All --</option>
         <?php if (!is_null($categories)): ?>
@@ -41,7 +41,7 @@ $limit = filter_input(INPUT_GET, 'result_limit', FILTER_VALIDATE_INT);
     </select>
   </div>
   <div>
-    <label for="resultLimit">Results per page</label>
+    <label for="resultLimit">Results per page</label><br>
     <select name="result_limit" id="resultLimit">
       <?php foreach($page_limits as $page_limit): ?>
       <option <?= intval($limit) == $page_limit ? 'selected' : '' ?> value="<?= $page_limit ?>"><?= $page_limit ?></option>

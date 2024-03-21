@@ -19,6 +19,7 @@ if (!$has_admin) {
     </title>
 </head>
 <body>
+<a href="logout.php">Logout</a>
   <h1>SnackerRank Admin Dashboard</h1>
   <div>
     <a href="snack_form.php">New Snack Entry</a>

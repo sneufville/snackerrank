@@ -92,3 +92,14 @@ function get_categories(): ?array
     $statement->execute();
     return $statement->fetchAll();
 }
+
+function get_snack($snack_id): ?array
+{
+    global $db;
+    $query_string = "SELECT s.id, s.snack_name, s.snack_description, s.category_id, s.last_updated, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id WHERE s.id = :snack_id";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':snack_id', $snack_id);
+    $statement->execute();
+    $snack = $statement->fetch();
+    return is_bool($snack) ? null : $snack;
+}
