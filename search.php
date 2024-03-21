@@ -8,6 +8,7 @@
  ****************/
 
 require_once('search_helpers.php');
+session_start();
 
 // get variables
 $search_text = filter_input(INPUT_GET, 'search_input', FILTER_SANITIZE_FULL_SPECIAL_CHARS);

@@ -5,6 +5,9 @@
  * Date: March 18, 2024,
  * Description: Index / homepage of SnackerRank
  ****************/
+
+session_start();
+print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="en">
