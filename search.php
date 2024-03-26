@@ -12,7 +12,7 @@ session_start();
 
 // get variables
 $search_text = filter_input(INPUT_GET, 'search_input', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$search_category = filter_input(INPUT_GET, 'search_category', FILTER_VALIDATE_INT);
+$search_category = filter_input(INPUT_GET, 'snack_category', FILTER_VALIDATE_INT);
 if ($search_category == 0) $search_category = null;
 $limit = filter_input(INPUT_GET, 'result_limit', FILTER_VALIDATE_INT);
 $page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
@@ -42,6 +42,9 @@ function build_pagination_url(int $page_number): string
   <title>Search Results</title>
 </head>
 <body>
+<div>
+  <a href="index.php">Home</a><br>
+</div>
 <?php require('category_nav.php') ?>
 <?php require('search_form.php') ?>
 <?php if (!is_null($search_results)): ?>

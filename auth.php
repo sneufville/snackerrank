@@ -3,7 +3,15 @@
 require_once('auth_helpers.php');
 session_start();
 
-user_session_check();
+if (array_key_exists('current_user', $_SESSION)) {
+    header("Location: index.php");
+    exit;
+}
+
+if (array_key_exists('user_role', $_SESSION)) {
+    header("Location: index.php");
+    exit;
+}
 
 $auth_msg = null;
 $authenticated = false;

@@ -9,6 +9,16 @@
 
 require_once('db_connect.php');
 
+function get_recently_added_snacks(): ?array
+{
+    global $db;
+
+    $query_string = "SELECT s.id, s.category_id, s.snack_name, s.snack_description, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id ORDER BY s.last_updated DESC LIMIT 5";
+    $statement = $db->prepare($query_string);
+    $statement->execute();
+    return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
 /**
  * Function that executes the search function and returns either an associative array with data or null
  *
@@ -27,7 +37,7 @@ function exec_search(?string $search_text, ?int $category_id, ?int $limit, ?int 
 
     if (!is_null($page) && $page > 0)  $start = ($page - 1) * $limit;
 
-    if (!is_null($search_text) && is_null($category_id)) {
+    if (!is_null($search_text) && !is_null($category_id)) {
         $count_query = "SELECT count(*) as total_results FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id WHERE category_id = :category_id AND snack_name LIKE :search_text OR snack_description LIKE :search_text";
         $count_statement = $db->prepare($count_query);
         $count_statement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
@@ -102,4 +112,15 @@ function get_snack($snack_id): ?array
     $statement->execute();
     $snack = $statement->fetch();
     return is_bool($snack) ? null : $snack;
+}
+
+function get_category($category_id): ?array
+{
+    global $db;
+    $query_string = "SELECT id, category_name, category_description FROM snack_categories WHERE id = :category_id";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':category_id', $category_id);
+    $statement->execute();
+    $category = $statement->fetch();
+    return is_bool($category) ? null : $category;
 }

@@ -33,7 +33,7 @@ function authenticate_user(string $username, string $password): bool
 
 function user_session_check(): void
 {
-    if (isset($_SESSION) && !empty($_SESSION['current_user'])) {
+    if (!empty($_SESSION) && !empty($_SESSION['current_user'])) {
         print_r($_SESSION);
         if ($_SESSION['user_role'] == 'admin') {
             echo 'redirect to admin dashboard';
@@ -51,7 +51,10 @@ function user_session_check(): void
 
 function has_admin_session(): bool
 {
-    if (isset($_SESSION) && !is_null($_SESSION['current_user'])) {
+    if (isset($_SESSION)) {
+        //&& !is_null($_SESSION['current_user']))
+//        print_r ($_SESSION);
+        if (!array_key_exists('current_user', $_SESSION)) return false;
         return $_SESSION['user_role'] == 'admin';
     }
 

@@ -5,8 +5,13 @@
  * Date: March 18, 2024,
  * Description: Index / homepage of SnackerRank
  ****************/
+require_once ('auth_helpers.php');
 
 session_start();
+
+$loggedIn = array_key_exists('current_user', $_SESSION);
+$is_admin = has_admin_session();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +19,14 @@ session_start();
   <title>SnackerRank</title>
 </head>
 <body>
+<?php if ($loggedIn): ?>
+<a href="logout.php">Logout</a>
+<?php else: ?>
 <a href="auth.php">Login</a>
+<?php endif; ?>
+<?php if ($is_admin): ?>
+<a href="admin_dashboard.php">Admin Dashboard</a>
+<?php endif; ?>
 <h1>Welcome to SnackerRank</h1>
 <small>The ultimate snack ranking website ever made</small>
 <hr>
