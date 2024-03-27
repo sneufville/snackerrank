@@ -114,6 +114,16 @@ function get_snack($snack_id): ?array
     return is_bool($snack) ? null : $snack;
 }
 
+function get_snacks_with_category($category_id): ?array
+{
+    global $db;
+    $query_string = "SELECT s.id, s.snack_name, s.snack_description, s.category_id, s.last_updated, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id WHERE s.category_id = :category_id";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':category_id', $category_id);
+    $statement->execute();
+    return $statement->fetchAll();
+}
+
 function get_category($category_id): ?array
 {
     global $db;

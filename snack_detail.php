@@ -25,7 +25,7 @@ $snack = get_snack($snack_id);
     <div>
         <h1><?= $snack['snack_name'] ?></h1>
         <div>
-            <?= $snack['snack_description'] ?>
+            <?= htmlspecialchars_decode($snack['snack_description']) ?>
         </div>
         <br>
         <label>Category: <?= $snack['category_name'] ?></label>

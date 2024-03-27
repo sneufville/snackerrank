@@ -10,6 +10,9 @@ if (!has_admin_session()) {
     user_session_check();
 }
 
+$allowedTags='<p><strong><em><u><h1><h2><h3><h4><h5><h6>';
+$allowedTags.='<li><ol><ul><span><div><br><ins><del>';
+
 $categories = get_categories();
 
 $snack_name_error = null;
@@ -46,12 +49,32 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
     $snack_name_error = empty($_POST['snack_name']) || strlen(trim($_POST['snack_name'])) == 0 ? 'Must be at least 1 character': null;
     $snack_description_error = empty($_POST['snack_description']) || strlen(trim($_POST['snack_description'])) == 0 ? 'Must be at least 1 character' : null;
 }
+//print_r($_SERVER);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
         <title>SnackerRank - Add Snack</title>
+        <script language="javascript" type="text/javascript" src="vendor/tinymce/tinymce/tinymce.min.js"></script>
+        <script language="javascript" type="text/javascript">
+
+          tinymce.init({
+            mode: "exact",
+            selector : "#snack_description",
+            theme_advanced_toolbar_location : "top",
+            theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,"
+              + "justifyleft,justifycenter,justifyright,justifyfull,formatselect,"
+              + "bullist,numlist,outdent,indent",
+            theme_advanced_buttons2 : "link,unlink,anchor,image,separator,"
+              +"undo,redo,cleanup,code,separator,sub,sup,charmap",
+            theme_advanced_buttons3 : "",
+            height:"350px",
+            width:"600px"
+          });
+
+        </script>
     </head>
     <body>
     <div>

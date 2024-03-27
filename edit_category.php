@@ -98,5 +98,10 @@ if ($_POST && !empty($_POST['category_name']) && !empty($_POST['category_descrip
             <button type="submit">Update Category</button>
         </div>
     </form>
+    <br>
+    <form action="delete_category.php" method="post">
+        <input type="hidden" name="category_id" value="<?= $category_id ?>">
+        <button type="submit">Delete Category</button>
+    </form>
     </body>
 </html>

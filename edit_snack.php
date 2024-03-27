@@ -76,6 +76,24 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
 <html lang="en">
 <head>
     <title>Edit Snack</title>
+  <script language="javascript" type="text/javascript" src="vendor/tinymce/tinymce/tinymce.min.js"></script>
+  <script language="javascript" type="text/javascript">
+
+    tinymce.init({
+      mode: "exact",
+      selector : "#snack_description",
+      theme_advanced_toolbar_location : "top",
+      theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,"
+        + "justifyleft,justifycenter,justifyright,justifyfull,formatselect,"
+        + "bullist,numlist,outdent,indent",
+      theme_advanced_buttons2 : "link,unlink,anchor,image,separator,"
+        +"undo,redo,cleanup,code,separator,sub,sup,charmap",
+      theme_advanced_buttons3 : "",
+      height:"350px",
+      width:"600px"
+    });
+
+  </script>
 </head>
 <body>
 <div>

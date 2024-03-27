@@ -53,7 +53,7 @@ function build_pagination_url(int $page_number): string
       <h2>
         <a href="snack_detail.php?snack_id=<?= $result['id'] ?>"><?= $result['snack_name'] ?></a>
       </h2>
-      <div><?= $result['snack_description']; ?></div>
+      <div><?= htmlspecialchars_decode($result['snack_description']); ?></div>
       <label><i><?= $result['category_name']; ?></i></label>
     </div>
     <?php endforeach; ?>
