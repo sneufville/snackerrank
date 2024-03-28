@@ -1,11 +1,16 @@
 <?php
 
+require_once (__DIR__ . '/vendor/autoload.php');
 require_once('db_connect.php');
 require_once('search_helpers.php');
 
 session_start();
+
+$flash_msg = new \Plasticbrain\FlashMessages\FlashMessages();
+
 if (!array_key_exists('current_user', $_SESSION)) {
-    header("Location: index.php");
+    $flash_msg->error('You were not authorized to access this area', 'index.php');
+//    header("Location: index.php");
     exit;
 }
 
@@ -81,6 +86,7 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
 
     tinymce.init({
       mode: "exact",
+      license_key: 'gpl',
       selector : "#snack_description",
       theme_advanced_toolbar_location : "top",
       theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,"

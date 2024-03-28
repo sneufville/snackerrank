@@ -134,3 +134,13 @@ function get_category($category_id): ?array
     $category = $statement->fetch();
     return is_bool($category) ? null : $category;
 }
+
+function get_comments($snack_id): ?array
+{
+    global $db;
+    $query_string = "SELECT id, commenter_name, commenter_email_address, comment_text, last_updated FROM snack_comments WHERE related_snack_id = :snack_id AND approved = TRUE ORDER BY last_updated DESC";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':snack_id', $snack_id);
+    $statement->execute();
+    return $statement->fetchAll();
+}

@@ -3,13 +3,22 @@
         'name' => 'wd2/snackerrank',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e72fee9b303d6018242af3fdc344987f0a785d99',
+        'reference' => 'e2277f0ecd1ae64b05d9d70f105d23c640e59a94',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        'plasticbrain/php-flash-messages' => array(
+            'pretty_version' => 'v1.0.1',
+            'version' => '1.0.1.0',
+            'reference' => 'b565762619342057ce561de20d0f2f6e14f9aa77',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../plasticbrain/php-flash-messages',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'tinymce/tinymce' => array(
             'pretty_version' => '7.0.0',
             'version' => '7.0.0.0',
@@ -22,7 +31,7 @@
         'wd2/snackerrank' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e72fee9b303d6018242af3fdc344987f0a785d99',
+            'reference' => 'e2277f0ecd1ae64b05d9d70f105d23c640e59a94',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

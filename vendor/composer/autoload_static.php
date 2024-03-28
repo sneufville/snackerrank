@@ -6,6 +6,20 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit512848a23fcf72eea59dac0331634582
 {
+    public static $prefixLengthsPsr4 = array (
+        'P' => 
+        array (
+            'Plasticbrain\\FlashMessages\\' => 27,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Plasticbrain\\FlashMessages\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/plasticbrain/php-flash-messages/src',
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -13,6 +27,8 @@ class ComposerStaticInit512848a23fcf72eea59dac0331634582
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit512848a23fcf72eea59dac0331634582::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit512848a23fcf72eea59dac0331634582::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit512848a23fcf72eea59dac0331634582::$classMap;
 
         }, null, ClassLoader::class);

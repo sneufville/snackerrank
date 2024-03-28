@@ -1,10 +1,17 @@
 <?php
+
+require_once (__DIR__ . '/vendor/autoload.php');
+use Plasticbrain\FlashMessages\FlashMessages;
+
 require_once ('auth_helpers.php');
 require_once ('search_helpers.php');
 session_start();
 
+$flash_msg = new FlashMessages();
+
 if (!array_key_exists('current_user', $_SESSION)) {
-  header("Location: index.php");
+//  header("Location: index.php");
+  $flash_msg->error('You were not authorized to access this area', 'index.php');
   exit;
 }
 

@@ -5,12 +5,18 @@
  * Date: March 18, 2024,
  * Description: Index / homepage of SnackerRank
  ****************/
+// autoload of 3rd-party dependencies
+require_once (__DIR__ . '/vendor/autoload.php');
+use Plasticbrain\FlashMessages\FlashMessages;
+
 require_once ('auth_helpers.php');
 
 session_start();
 
+$flash_msg = new FlashMessages();
 $loggedIn = array_key_exists('current_user', $_SESSION);
 $is_admin = has_admin_session();
+
 
 ?>
 <!DOCTYPE html>
@@ -19,6 +25,10 @@ $is_admin = has_admin_session();
   <title>SnackerRank</title>
 </head>
 <body>
+<?php if($flash_msg->hasErrors()): ?>
+  <?= $flash_msg->display(); ?>
+<?php endif; ?>
+
 <?php if ($loggedIn): ?>
 <a href="logout.php">Logout</a>
 <?php else: ?>

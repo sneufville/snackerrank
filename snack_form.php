@@ -62,6 +62,7 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
 
           tinymce.init({
             mode: "exact",
+            license_key: 'gpl',
             selector : "#snack_description",
             theme_advanced_toolbar_location : "top",
             theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,"

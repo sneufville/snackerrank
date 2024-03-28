@@ -10,6 +10,8 @@
     }
   ],
   "require": {
-    "tinymce/tinymce": "^7.0"
+    "tinymce/tinymce": "^7.0",
+    "plasticbrain/php-flash-messages": "^1.0",
+    "ext-pdo": "*"
   }
 }
