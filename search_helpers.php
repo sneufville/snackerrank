@@ -135,12 +135,35 @@ function get_category($category_id): ?array
     return is_bool($category) ? null : $category;
 }
 
-function get_comments($snack_id): ?array
+function get_comments($snack_id, $is_admin = false): ?array
 {
     global $db;
-    $query_string = "SELECT id, commenter_name, commenter_email_address, comment_text, last_updated FROM snack_comments WHERE related_snack_id = :snack_id AND approved = TRUE ORDER BY last_updated DESC";
+    $where_condition = $is_admin ? "related_snack_id = :related_snack_id" : "related_snack_id = :related_snack_id AND approved = TRUE";
+    $query_string = "SELECT id, commenter_name, commenter_email_address, comment_text, related_snack_id, approved, last_updated FROM snack_comments WHERE " . $where_condition . " ORDER BY last_updated DESC";
     $statement = $db->prepare($query_string);
-    $statement->bindValue(':snack_id', $snack_id);
+    $statement->bindValue(':related_snack_id', $snack_id);
     $statement->execute();
     return $statement->fetchAll();
+}
+
+function get_snack_images($snack_id): ?array
+{
+    global $db;
+    $query_string = "SELECT id, image_path, image_title, related_snack_id, last_updated FROM snack_images WHERE related_snack_id = :related_snack_id";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':related_snack_id', $snack_id);
+    $statement->execute();
+    return $statement->fetchAll();
+}
+
+function get_comment_for_mod($snack_id, $comment_id): ?array
+{
+    global $db;
+    $query_string = "SELECT id, commenter_name, commenter_email_address, comment_text, related_snack_id FROM snack_comments WHERE id = :comment_id AND related_snack_id = :related_snack_id";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':comment_id', $comment_id, PDO::PARAM_INT);
+    $statement->bindValue(':related_snack_id', $snack_id, PDO::PARAM_INT);
+    $statement->execute();
+    $comment = $statement->fetch();
+    return is_bool($comment) ? null : $comment;
 }

@@ -59,7 +59,7 @@ $categories = get_categories();
           <h3><?= $snack['snack_name'] ?></h3>
           <div>
             <a href="edit_snack.php?snack_id=<?= $snack['id'] ?>">Edit Snack</a>
-            <a href="">Manage Related Snack Data</a>
+            <a href="manage_snack_data.php?snack_id=<?= $snack['id'] ?>">Manage Related Snack Data</a>
           </div>
         </div>
     <?php endforeach; ?>
