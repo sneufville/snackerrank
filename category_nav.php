@@ -11,11 +11,11 @@ $categories = get_categories();
     <?php if (!is_null($categories)): ?>
     <ul>
         <li>
-            <a href="search.php">All Snacks</a>
+            <a href="<?= $_SERVER['PHP_SELF'] ?>">All Snacks</a>
         </li>
         <?php foreach($categories as $category): ?>
         <li>
-            <a href="search.php?snack_category=<?=$category['id'];?>">
+            <a href="?snack_category=<?=$category['id'];?>">
                 <?= $category['category_name']; ?>
             </a>
         </li>

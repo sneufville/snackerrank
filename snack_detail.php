@@ -88,10 +88,7 @@ if ($_POST && !empty($_POST['commenter_name']) && !empty($_POST['commenter_email
   <title>Snack Detail - <?= $snack ? $snack['snack_name'] : '' ?></title>
 </head>
 <body>
-<div>
-  <a href="index.php">SnackerRank Home</a><br>
-  <a href="search.php">Snack Search</a>
-</div>
+<?php require('main_nav.php') ?>
 <?php if ($flash_msg->hasErrors()): ?>
   <p>Errors</p>
     <?= $flash_msg->display() ?>

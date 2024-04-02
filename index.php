@@ -37,6 +37,7 @@ $is_admin = has_admin_session();
 <?php if ($is_admin): ?>
 <a href="admin_dashboard.php">Admin Dashboard</a>
 <?php endif; ?>
+<?php require('main_nav.php') ?>
 <h1>Welcome to SnackerRank</h1>
 <small>The ultimate snack ranking website ever made</small>
 <hr>
