@@ -25,6 +25,9 @@ $is_admin = has_admin_session();
   <title>SnackerRank</title>
 </head>
 <body>
+<?php if($flash_msg->hasMessages()): ?>
+ <?= $flash_msg->display(); ?>
+<?php endif; ?>
 <?php if($flash_msg->hasErrors()): ?>
   <?= $flash_msg->display(); ?>
 <?php endif; ?>

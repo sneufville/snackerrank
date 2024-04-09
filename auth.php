@@ -1,7 +1,11 @@
 <?php
 
+require_once (__DIR__ . '/vendor/autoload.php');
+use Plasticbrain\FlashMessages\FlashMessages;
+
 require_once('auth_helpers.php');
 session_start();
+$flash_msg = new FlashMessages();
 
 if (array_key_exists('current_user', $_SESSION)) {
     header("Location: index.php");
@@ -28,6 +32,7 @@ if ($_POST && !empty($_POST['username']) && !empty($_POST['password'])) {
     if (!$authenticated) {
         $auth_msg = "You have not provide correct login credentials";
     } else {
+        $flash_msg->success("Logged in");
         user_session_check();
     }
 }

@@ -167,3 +167,23 @@ function get_comment_for_mod($snack_id, $comment_id): ?array
     $comment = $statement->fetch();
     return is_bool($comment) ? null : $comment;
 }
+
+function get_user_list(): ?array
+{
+    global $db;
+    $query_string = "SELECT id, username, role, last_updated FROM users";
+    $statement = $db->prepare($query_string);
+    $statement->execute();
+    return $statement->fetchAll();
+}
+
+function get_user($user_id): ?array
+{
+    global $db;
+    $query_string = "SELECT id, username, role, last_updated FROM users WHERE id = :user_id";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $statement->execute();
+    $user = $statement->fetch();
+    return is_bool($user) ? null : $user;
+}
