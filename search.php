@@ -40,44 +40,48 @@ function build_pagination_url(int $page_number): string
 <html lang="en">
 <head>
   <title>Search Results</title>
+    <?php require_once('support/head_includes.php') ?>
 </head>
 <body>
-<div>
-  <a href="index.php">Home</a><br>
-</div>
-<?php require('category_nav.php') ?>
-<?php require('search_form.php') ?>
-<?php if (!is_null($search_results)): ?>
-    <?php foreach ($search_results['data'] as $result): ?>
-    <div>
-      <h2>
-        <a href="snack_detail.php?snack_id=<?= $result['id'] ?>"><?= $result['snack_name'] ?></a>
-      </h2>
-      <div><?= htmlspecialchars_decode($result['snack_description']); ?></div>
-      <label><i><?= $result['category_name']; ?></i></label>
-    </div>
-    <?php endforeach; ?>
-<?php endif; ?>
-<div>
-  <?php if ($search_results['total_results'] > $limit): ?>
-  <ul>
-      <?php if (!is_null($search_results['prev_page'])): ?>
-      <li>
-        <a href="<?= build_pagination_url($search_results['prev_page']) ?>">Prev</a>
-      </li>
-      <?php endif; ?>
-      <?php for ($i = 0; $i < $search_results['page_count']; $i++): ?>
-        <li>
-          <a href="<?= build_pagination_url($i + 1) ?>">Page <?= $i + 1 ?></a>
-        </li>
-      <?php endfor; ?>
-    <?php if (!is_null($search_results['next_page'])): ?>
-    <li>
-      <a href="<?= build_pagination_url($search_results['next_page']) ?>">Next</a>
-    </li>
+<div class="container">
+    <?php require_once('main_nav.php') ?>
+    <?php require('category_nav.php') ?>
+    <?php require('search_form.php') ?>
+    <?php if (!is_null($search_results)): ?>
+        <?php foreach ($search_results['data'] as $result): ?>
+        <div class="">
+          <div class="card-panel">
+            <h2 class="itemTitle">
+              <a href="snack_detail.php?snack_id=<?= $result['id'] ?>"><?= $result['snack_name'] ?></a>
+            </h2>
+            <div class="flow-text"><?= htmlspecialchars_decode($result['snack_description']); ?></div>
+            <span class="itemBadge"><i class="material-icons">label</i> <?= $result['category_name']; ?></span>
+          </div>
+        </div>
+        <?php endforeach; ?>
     <?php endif; ?>
-  </ul>
-  <?php endif; ?>
+  <div>
+      <?php if ($search_results['total_results'] > $limit): ?>
+        <ul>
+            <?php if (!is_null($search_results['prev_page'])): ?>
+              <li>
+                <a href="<?= build_pagination_url($search_results['prev_page']) ?>">Prev</a>
+              </li>
+            <?php endif; ?>
+            <?php for ($i = 0; $i < $search_results['page_count']; $i++): ?>
+              <li>
+                <a href="<?= build_pagination_url($i + 1) ?>">Page <?= $i + 1 ?></a>
+              </li>
+            <?php endfor; ?>
+            <?php if (!is_null($search_results['next_page'])): ?>
+              <li>
+                <a href="<?= build_pagination_url($search_results['next_page']) ?>">Next</a>
+              </li>
+            <?php endif; ?>
+        </ul>
+      <?php endif; ?>
+  </div>
 </div>
+<?php require_once('support/body_script.php') ?>
 </body>
 </html>

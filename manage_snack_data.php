@@ -41,6 +41,7 @@ $related_images = get_snack_images($snack_id);
 <html lang="en">
 <head>
     <title>Manage Snack</title>
+    <?php require_once('support/head_includes.php') ?>
 </head>
 <body>
     <?php if($flash_msg->hasMessages()): ?>

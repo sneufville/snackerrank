@@ -1,28 +1,29 @@
 <?php
 
-require_once (__DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/vendor/autoload.php');
+
 use Plasticbrain\FlashMessages\FlashMessages;
 
-require_once ('auth_helpers.php');
-require_once ('search_helpers.php');
+require_once('auth_helpers.php');
+require_once('search_helpers.php');
 session_start();
 
 $flash_msg = new FlashMessages();
 
 if (!array_key_exists('current_user', $_SESSION)) {
 //  header("Location: index.php");
-  $flash_msg->error('You were not authorized to access this area', 'index.php');
-  exit;
+    $flash_msg->error('You were not authorized to access this area', 'index.php');
+    exit;
 }
 
 if (!array_key_exists('user_role', $_SESSION)) {
-  header("Location: index.php");
-  exit;
+    header("Location: index.php");
+    exit;
 }
 
 if ($_SESSION['user_role'] != 'admin') {
-  header("Location: index.php");
-  exit;
+    header("Location: index.php");
+    exit;
 }
 
 // on load
@@ -40,14 +41,17 @@ $categories = get_categories();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>
-        Admin Dashboard
-    </title>
+  <title>
+    Admin Dashboard
+  </title>
+    <?php require_once('support/head_includes.php') ?>
 </head>
 <body>
-  <?php if($flash_msg->hasMessages()): ?>
-      <?= $flash_msg->display(); ?>
-  <?php endif; ?>
+<div class="container">
+    <?php if ($flash_msg->hasMessages()): ?>
+        <?= $flash_msg->display(); ?>
+    <?php endif; ?>
+  <?php require_once('partials/admin_nav.php') ?>
   <a href="index.php">SnackerRank Home</a>
   <a href="dashboard_list_users.php">Manage Users</a>
   <a href="logout.php">Logout</a>
@@ -57,35 +61,37 @@ $categories = get_categories();
   </div>
   <div>
     <h2>Recently Added Snacks</h2>
-    <?php if (is_array($recently_added_snacks)): ?>
-    <?php foreach($recently_added_snacks as $snack): ?>
-        <div>
-          <h3><?= $snack['snack_name'] ?></h3>
+      <?php if (is_array($recently_added_snacks)): ?>
+          <?php foreach ($recently_added_snacks as $snack): ?>
           <div>
-            <a href="edit_snack.php?snack_id=<?= $snack['id'] ?>">Edit Snack</a>
-            <a href="manage_snack_data.php?snack_id=<?= $snack['id'] ?>">Manage Related Snack Data</a>
+            <h3><?= $snack['snack_name'] ?></h3>
+            <div>
+              <a href="edit_snack.php?snack_id=<?= $snack['id'] ?>">Edit Snack</a>
+              <a href="manage_snack_data.php?snack_id=<?= $snack['id'] ?>">Manage Related Snack Data</a>
+            </div>
           </div>
-        </div>
-    <?php endforeach; ?>
-    <?php else: ?>
-    <p>No recently added snacks found</p>
-    <?php endif; ?>
+          <?php endforeach; ?>
+      <?php else: ?>
+        <p>No recently added snacks found</p>
+      <?php endif; ?>
   </div>
   <div>
     <h2>Categories</h2>
     <a href="category_form.php">+ New Snack Category</a>
-    <?php if (is_array($categories)): ?>
-    <?php foreach($categories as $category): ?>
-    <div>
-      <h3><?= $category['category_name'] ?></h3>
-      <div>
-        <a href="edit_category.php?cat_id=<?= $category['id'] ?>">Edit Category</a>
-      </div>
-    </div>
-    <?php endforeach; ?>
-    <?php else: ?>
-    <p>No categories were found</p>
-    <?php endif; ?>
+      <?php if (is_array($categories)): ?>
+          <?php foreach ($categories as $category): ?>
+          <div>
+            <h3><?= $category['category_name'] ?></h3>
+            <div>
+              <a href="edit_category.php?cat_id=<?= $category['id'] ?>">Edit Category</a>
+            </div>
+          </div>
+          <?php endforeach; ?>
+      <?php else: ?>
+        <p>No categories were found</p>
+      <?php endif; ?>
   </div>
+</div>
+<?php require_once ('support/body_script.php') ?>
 </body>
 </html>

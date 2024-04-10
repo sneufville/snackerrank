@@ -68,6 +68,7 @@ if ($_POST && !empty($_POST['username']) && !empty($_POST['password']) && !empty
 <html lang="en">
     <head>
         <title>Add SnackerRank User</title>
+        <?php require_once('support/head_includes.php') ?>
     </head>
     <body>
         <?php if ($flash_msg->hasMessages()): ?>

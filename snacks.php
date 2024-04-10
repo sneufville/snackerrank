@@ -39,6 +39,7 @@ foreach($categories as $category) {
 <html lang="en">
     <head>
         <title>Snacks</title>
+        <?php require_once('support/head_includes.php') ?>
     </head>
     <body>
     <?php require('main_nav.php') ?>

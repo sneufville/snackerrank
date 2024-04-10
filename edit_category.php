@@ -67,6 +67,7 @@ if ($_POST && !empty($_POST['category_name']) && !empty($_POST['category_descrip
 <html lang="en">
     <head>
         <title>Edit Snack Category</title>
+        <?php require_once('support/head_includes.php') ?>
     </head>
     <body>
     <div>

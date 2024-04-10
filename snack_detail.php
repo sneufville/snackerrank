@@ -86,6 +86,7 @@ if ($_POST && !empty($_POST['commenter_name']) && !empty($_POST['commenter_email
 <html lang="en">
 <head>
   <title>Snack Detail - <?= $snack ? $snack['snack_name'] : '' ?></title>
+  <?php require_once('support/head_includes.php') ?>
 </head>
 <body>
 <?php require('main_nav.php') ?>

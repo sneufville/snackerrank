@@ -57,6 +57,7 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
     <head>
         <meta charset="UTF-8">
         <title>SnackerRank - Add Snack</title>
+        <?php require_once('support/head_includes.php') ?>
         <script language="javascript" type="text/javascript" src="vendor/tinymce/tinymce/tinymce.min.js"></script>
         <script language="javascript" type="text/javascript">
 
