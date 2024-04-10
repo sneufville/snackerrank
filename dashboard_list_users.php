@@ -31,7 +31,7 @@ print_r($_SESSION);
             <?php if($flash_msg->hasErrors()): ?>
             <?= $flash_msg->display() ?>
             <?php endif; ?>
-            <a>Add User</a>
+            <a href="dashboard_add_user.php">Add User</a>
             <?php if (is_array($users)): ?>
             <table>
                 <caption>Manage SnackerRank Users</caption>

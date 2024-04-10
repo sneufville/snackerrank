@@ -20,10 +20,44 @@ if ($_POST && !empty($_POST['username']) && !empty($_POST['password']) && !empty
     $password = trim($_POST['password']);
     $role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-    if (strlen($password) < 6) {
-        $flash_msg->error("Password requirements not met", "dashboard_add_user.php");
-        exit;
+    $submission_errors = [];
+
+    if (strlen($username) < 3 || strlen($username) > 100) {
+      $submission_errors[] = "Username length requirements not met. Must be between 3 and 100 characters";
     }
+
+    if (strlen($password) < 6) {
+      $submission_errors[] = "Password requirements not met. Must be at least 6 characters";
+    }
+    if (!in_array($role, ["user", "admin"])) {
+      $submission_errors[] = "An invalid role was given";
+    }
+
+    if (count($submission_errors) > 0) {
+
+      foreach ($submission_errors as $error) {
+        $flash_msg->error($error);
+      }
+      header('Location: dashboard_add_user.php');
+      exit;
+    }
+
+    $hashed_pw = password_hash($password, PASSWORD_BCRYPT);
+    global $db;
+    $query_string = "INSERT INTO users (username, password, role) VALUES (:username, :hashed_password, :role)";
+    $statement = $db->prepare($query_string);
+    $statement->bindValue(':username', $username);
+    $statement->bindValue(':hashed_password', $hashed_pw);
+    $statement->bindValue(':role', $role);
+    if ($statement->execute()) {
+      $flash_msg->success("User account created: {$username}", "dashboard_list_users.php");
+    } else {
+      $flash_msg->error("An error occurred while trying to add a user. Please contact the admin", "dashboard_add_user.php");
+    }
+
+} elseif ($_POST) {
+  // post only
+    $flash_msg->error("The required information for adding a user was not submitted", "dashboard_add_user.php");
 } else {
 
 }
@@ -36,21 +70,24 @@ if ($_POST && !empty($_POST['username']) && !empty($_POST['password']) && !empty
         <title>Add SnackerRank User</title>
     </head>
     <body>
+        <?php if ($flash_msg->hasMessages()): ?>
+        <?= $flash_msg->display(); ?>
+        <?php endif; ?>
         <?php if ($flash_msg->hasErrors()): ?>
         <?= $flash_msg->display(); ?>
         <?php endif; ?>
         <div>
             <form action="" method="post">
                 <div class="formRow">
-                    <label for="username">Username</label>
+                    <label for="username">Username</label><br>
                     <input type="text" name="username" id="username">
                 </div>
                 <div class="formRow">
-                    <label for="password">Password</label>
+                    <label for="password">Password</label><br>
                     <input type="password" name="password" id="password">
                 </div>
                 <div class="formRow">
-                    <label for="role">Role</label>
+                    <label for="role">Role</label><br>
                     <select name="role" id="role">
                         <option value="">Select A Role</option>
                         <option value="user">User</option>
