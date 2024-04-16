@@ -4,6 +4,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 require_once('db_connect.php');
 require_once('search_helpers.php');
 require_once('auth_helpers.php');
+require_once('image_helpers.php');
 
 session_start();
 
@@ -68,8 +69,38 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
     $statement->bindValue(':snack_description', $snack_description);
     $statement->bindValue(':snack_id', $snack_id);
     if ($statement->execute()) {
-        header('Location: admin_dashboard.php');
-        exit;
+//        header('Location: admin_dashboard.php');
+//        exit;
+        if (isset($_FILES['image'])) {
+            // on error, gracefully fail with a warning to the user
+            if ($_FILES['image']['error'] > 0) {
+                $flash_msg->warning("Warning: Your image was not uploaded for snack: {$snack_name}");
+            } else {
+                $image_file = $_FILES['image']['name'];
+                $temp_image_path = $_FILES['image']['tmp_name'];
+                $destination_path = build_upload_path($image_file);
+                if (is_image_file($temp_image_path, $destination_path)) {
+                    $upload_success = move_uploaded_file($temp_image_path, $destination_path);
+                    $image_query_string = "INSERT INTO snack_images (image_path, image_title, related_snack_id) VALUES (:image_path, :image_title, :related_snack_id)";
+                    $img_statement = $db->prepare($image_query_string);
+                    $img_statement->bindValue(':image_path', "public_images/$image_file");
+                    $img_statement->bindValue(':image_title', "image for $snack_name");
+                    $img_statement->bindValue(':related_snack_id', $snack_id, PDO::PARAM_INT);
+                    if ($img_statement->execute()) {
+                        $flash_msg->success("Snack updated with image successfully", "admin_dashboard.php");
+                        exit;
+                    } else {
+                        $flash_msg->warning("Snack was updated but there was a problem with your image upload", "admin_dashboard.php");
+                    }
+                } else {
+                    $flash_msg->warning("Warning: You attempted to upload an unsupported image. Ignoring");
+                }
+            }
+        } else {
+//            header('Location: admin_dashboard.php');
+            $flash_msg->success("Snack updated successfully", "admin_dashboard.php");
+            exit;
+        }
     }
 } else {
 //    $snack_name = null;
@@ -108,7 +139,11 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
 <body>
 <div class="container">
   <?php require_once('partials/admin_nav.php') ?>
-  <form action="" method="post">
+  <form action="" method="post" enctype="multipart/form-data">
+    <div class="row">
+      <label for="image">Upload Another Snack Image</label>
+      <input type="file" name="image" id="image" accept="image/*">
+    </div>
     <div class="input-field">
       <label for="category_id">Category *</label><br>
       <select name="category_id" id="category_id" class="browser-default">
@@ -138,13 +173,13 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
         <?php endif; ?>
     </div>
     <div class="formRow">
-      <button type="submit">Update Snack Entry</button>
+      <button class="btn" type="submit">Update Snack Entry</button>
     </div>
   </form>
   <br>
   <form action="delete_snack.php" method="post">
     <input type="hidden" name="snack_id" value="<?= $snack_id ?>">
-    <button type="submit">Delete Snack</button>
+    <button class="btn red" type="submit">Delete Snack</button>
   </form>
 </div>
 <?php require_once('support/body_script.php') ?>

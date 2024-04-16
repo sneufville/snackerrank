@@ -109,7 +109,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] > 0) {
           <?php if (count($related_images) > 0): ?>
               <?php foreach ($related_images as $image): ?>
               <div>
-                <img alt="snack image" src="<?= $image['image_path'] ?>">
+                <img alt="<?= $image['image_title'] ?>" class="responsive-img" src="<?= $image['image_path'] ?>">
               </div>
               <?php endforeach; ?>
           <?php else: ?>

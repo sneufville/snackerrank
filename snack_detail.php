@@ -114,6 +114,9 @@ if ($_POST && !empty($_POST['commenter_name']) && !empty($_POST['commenter_email
       </div>
       <h3>Snack Images</h3>
       <?php if (count($item_images) > 0): ?>
+        <?php foreach($item_images as $image): ?>
+            <img alt="<?= $image['image_title'] ?>" class="responsive-img" src="<?= $image['image_path'] ?>">
+        <?php endforeach; ?>
       <?php else: ?>
         <div class="noResultsContainer noResultsContainer_Row">
           <i class="material-icons fitContent">info</i>
