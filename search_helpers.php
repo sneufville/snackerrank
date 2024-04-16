@@ -13,7 +13,7 @@ function get_recently_added_snacks(): ?array
 {
     global $db;
 
-    $query_string = "SELECT s.id, s.category_id, s.snack_name, s.snack_description, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id ORDER BY s.last_updated DESC LIMIT 5";
+    $query_string = "SELECT s.id, s.category_id, s.snack_name, s.snack_description, sc.category_name FROM snacks s INNER JOIN snackerrank.snack_categories sc on s.category_id = sc.id ORDER BY s.last_updated DESC";
     $statement = $db->prepare($query_string);
     $statement->execute();
     return $statement->fetchAll(PDO::FETCH_ASSOC);

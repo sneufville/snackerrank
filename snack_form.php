@@ -59,8 +59,8 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
                     $upload_success = move_uploaded_file($temp_image_path, $destination_path);
                     $image_query_string = "INSERT INTO snack_images (image_path, image_title, related_snack_id) VALUES (:image_path, :image_title, :related_snack_id)";
                     $img_statement = $db->prepare($image_query_string);
-                    $img_statement->bindValue(':image_path', $destination_path);
-                    $img_statement->bindValue(':image_title', '');
+                    $img_statement->bindValue(':image_path', "public_images/$image_file");
+                    $img_statement->bindValue(':image_title', "image for $snack_name");
                     $img_statement->bindValue(':related_snack_id', $last_insert_id, PDO::PARAM_INT);
                     if ($img_statement->execute()) {
                       $flash_msg->success("Snack added with image successfully", "admin_dashboard.php");
@@ -121,7 +121,7 @@ if ($_POST && !empty($_POST['category_id']) && !empty($_POST['snack_name']) && !
     <h1>Add a New Snack Entry</h1>
     <small>Use the form below to add a tasty snack entry</small>
   </div>
-  <form action="" method="post">
+  <form action="" method="post" enctype="multipart/form-data">
     <div class="row">
       <label for="image">Upload Snack Image</label>
       <input type="file" name="image" id="image" accept="image/*">
