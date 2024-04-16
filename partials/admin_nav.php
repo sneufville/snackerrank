@@ -2,8 +2,8 @@
 if (session_status() != PHP_SESSION_ACTIVE) {
     session_start();
 }
-$current_user = $_SESSION['current_user'];
-$user_role = $_SESSION['user_role'];
+$current_user = $_SESSION['current_user'] ?? null;
+$user_role = $_SESSION['user_role'] ?? null;
 ?>
 
 <?php if ($user_role == 'admin'): ?>

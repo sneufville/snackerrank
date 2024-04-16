@@ -29,9 +29,13 @@ $commenter_name_error = null;
 $commenter_email_error = null;
 $comment_text_error = null;
 
-if ($_POST && !empty($_POST['commenter_name']) && !empty($_POST['commenter_email']) && !empty($_POST['comment_text'])) {
-    $commenter_name = filter_input(INPUT_POST, 'commenter_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $commenter_email = filter_input(INPUT_POST, 'commenter_email', FILTER_VALIDATE_EMAIL);
+if ($_POST && (!is_null($current_user) || !empty($_POST['commenter_name'])) && !empty($_POST['comment_text'])) {
+    if ($current_user) {
+      $commenter_name = $current_user;
+    } else {
+        $commenter_name = filter_input(INPUT_POST, 'commenter_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    }
+//    $commenter_email = filter_input(INPUT_POST, 'commenter_email', FILTER_VALIDATE_EMAIL);
     $comment_text = filter_input(INPUT_POST, 'comment_text', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     $errors = [];
@@ -39,15 +43,15 @@ if ($_POST && !empty($_POST['commenter_name']) && !empty($_POST['commenter_email
         $commenter_name_error = 'At least 3 characters are required for a name';
     }
 
-    if (!$commenter_email) {
-        $commenter_email_error = 'A valid email address is required';
-    }
+//    if (!$commenter_email) {
+//        $commenter_email_error = 'A valid email address is required';
+//    }
 
     if (strlen($comment_text) < 10) {
         $comment_text_error = 'A comment should be at least 10 characters';
     }
 
-    if (!is_null($commenter_name_error) || !is_null($commenter_email_error) || !is_null($comment_text_error)) {
+    if (!is_null($commenter_name_error) || !is_null($comment_text_error)) {
         $flash_msg->error('There was a problem with submitting your comment', $_SERVER['HTTP_REFERER']);
 //        exit;
     }
@@ -63,10 +67,10 @@ if ($_POST && !empty($_POST['commenter_name']) && !empty($_POST['commenter_email
     $related_snack_id = $parsed_data['snack_id'];
 
     global $db;
-    $query_string = "INSERT INTO snack_comments (commenter_name, commenter_email_address, comment_text, ip_address, related_snack_id, approved) VALUES (:commenter_name, :commenter_email_address, :comment_text, :ip_address, :related_snack_id, :approved)";
+    $query_string = "INSERT INTO snack_comments (commenter_name, comment_text, ip_address, related_snack_id, approved) VALUES (:commenter_name, :comment_text, :ip_address, :related_snack_id, :approved)";
     $statement = $db->prepare($query_string);
     $statement->bindValue(':commenter_name', $commenter_name);
-    $statement->bindValue(':commenter_email_address', $commenter_email);
+//    $statement->bindValue(':commenter_email_address', $commenter_email);
     $statement->bindValue(':comment_text', $comment_text);
     $statement->bindValue(':ip_address', $_SERVER['REMOTE_ADDR']);
     $statement->bindParam(':related_snack_id', $related_snack_id, PDO::PARAM_INT);
@@ -140,13 +144,19 @@ if ($_POST && !empty($_POST['commenter_name']) && !empty($_POST['commenter_email
       <input type="hidden" name="related_snack_id" value="<?= $snack_id ?>">
       <div class="formRow input-field">
         <label for="commenter_name">Your Name</label><br>
+        <?php if(!is_null($current_user)): ?>
+          <input type="text" id="comment_name" value="<?= $current_user ?>" disabled>
+        <?php else: ?>
         <input type="text" name="commenter_name" id="commenter_name" placeholder="Ex. John Battman"
                value="<?= $_POST['commenter_name'] ?? $commenter_name ?>">
+        <?php endif; ?>
       </div>
       <div class="formRow input-field">
-        <label for="commenter_email">Your Email</label><br>
+        <?php if(is_null($current_user)): ?>
+        <label for="commenter_email">Your Email (optional)</label><br>
         <input type="email" name="commenter_email" id="commenter_email" placeholder="john.battman@example.ca"
                value="<?= $_POST['commenter_email'] ?? $commenter_email ?>">
+        <?php endif; ?>
       </div>
       <div class="formRow input-field">
         <label for="comment_text">Your comment</label><br>

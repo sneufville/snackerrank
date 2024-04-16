@@ -12,9 +12,7 @@ session_start();
 
 $flash_msg = new FlashMessages();
 
-if (!has_admin_session()) {
-    user_session_check();
-}
+admin_auth_guard();
 
 $allowedTags = '<p><strong><em><u><h1><h2><h3><h4><h5><h6>';
 $allowedTags .= '<li><ol><ul><span><div><br><ins><del>';
