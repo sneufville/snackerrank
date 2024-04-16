@@ -1,6 +1,7 @@
 <?php
 
-require_once (__DIR__ . '/vendor/autoload.php');
+require_once(__DIR__ . '/vendor/autoload.php');
+
 use Plasticbrain\FlashMessages\FlashMessages;
 
 require_once('auth_helpers.php');
@@ -43,28 +44,37 @@ if ($_POST && !empty($_POST['username']) && !empty($_POST['password'])) {
 <html lang="en">
 <head>
   <title>SnackerRank - Login</title>
+    <?php require_once('support/head_includes.php') ?>
 </head>
 <body>
-<div>
-  <form action="" method="post">
-    <h1>SnackerRank Login</h1>
-    <div class="formRow">
-      <label for="username">Username</label>
-      <input type="text" class="formInput" id="username" name="username">
-    </div>
-    <div class="formRow">
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" class="formInput">
-    </div>
-    <div class="formRow">
-      <button type="submit">Login</button>
-    </div>
-    <?php if (!is_null($auth_msg)): ?>
-    <div class="errorRow">
-      <p><?= $auth_msg; ?></p>
-    </div>
-    <?php endif; ?>
-  </form>
+<div class="container">
+    <?php require_once('main_nav.php') ?>
+  <div class="row">
+    <form action="" class="col offset-l2 s8" method="post">
+      <div class="row">
+        <h1>SnackerRank Login</h1>
+        <p>Use the form below to log into SnackerRank</p>
+      </div>
+      <div class="row">
+        <div class="input-field">
+          <label for="username">Username</label>
+          <input type="text" class="formInput" id="username" name="username">
+        </div>
+        <div class="input-field">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" class="formInput">
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn-large" type="submit">Login</button>
+      </div>
+        <?php if (!is_null($auth_msg)): ?>
+          <div class="errorRow">
+            <p><?= $auth_msg; ?></p>
+          </div>
+        <?php endif; ?>
+    </form>
+  </div>
 </div>
 </body>
 </html>

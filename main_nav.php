@@ -6,8 +6,8 @@ if (session_status() != PHP_SESSION_ACTIVE) {
     session_start();
 }
 
-$current_user = $_SESSION['current_user'];
-$user_role = $_SESSION['user_role'];
+$current_user = $_SESSION['current_user'] ?? null;
+$user_role = $_SESSION['user_role'] ?? null;
 
 ?>
 <?php if (!is_null($current_user)): ?>
@@ -27,6 +27,8 @@ $user_role = $_SESSION['user_role'];
       <li><a href="search.php">Snack Search</a></li>
       <?php if (!is_null($current_user)): ?>
         <li><a href="#!" class="dropdown-trigger" data-target="userDropdown"><?= $current_user ?><i class="material-icons right">arrow_drop_down</i></a></li>
+      <?php else: ?>
+        <li><a href="auth.php">Login</a></li>
       <?php endif; ?>
     </ul>
   </div>
