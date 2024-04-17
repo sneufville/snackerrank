@@ -71,13 +71,15 @@ if ($_POST && !empty($_POST['username']) && !empty($_POST['password']) && !empty
         <?php require_once('support/head_includes.php') ?>
     </head>
     <body>
+        <div class="container">
+        <?php require_once('partials/admin_nav.php') ?>
         <?php if ($flash_msg->hasMessages()): ?>
         <?= $flash_msg->display(); ?>
         <?php endif; ?>
         <?php if ($flash_msg->hasErrors()): ?>
         <?= $flash_msg->display(); ?>
         <?php endif; ?>
-        <div>
+            <h2>Add A User</h2>
             <form action="" method="post">
                 <div class="formRow">
                     <label for="username">Username</label><br>
@@ -89,16 +91,18 @@ if ($_POST && !empty($_POST['username']) && !empty($_POST['password']) && !empty
                 </div>
                 <div class="formRow">
                     <label for="role">Role</label><br>
-                    <select name="role" id="role">
+                    <select class="browser-default" name="role" id="role">
                         <option value="">Select A Role</option>
                         <option value="user">User</option>
                         <option value="admin">Admin</option>
                     </select>
                 </div>
+                <br>
                 <div class="formRow">
-                    <button type="submit">Add User</button>
+                    <button class="btn" type="submit">Add User</button>
                 </div>
             </form>
         </div>
+    <?php require_once ('support/body_script.php') ?>
     </body>
 </html>
