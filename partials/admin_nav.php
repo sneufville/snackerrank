@@ -16,7 +16,6 @@ $user_role = $_SESSION['user_role'] ?? null;
   <div class="nav-wrapper">
     <a href="admin_dashboard.php" class="brand-logo left">SnackerRank Admin</a>
     <ul class="right">
-      <li><a href="">Categories</a></li>
       <li><a href="dashboard_list_users.php">Users</a></li>
       <li><a href="#!" class="dropdown-trigger"  data-target="userDropdown"><?= $current_user ?><i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>

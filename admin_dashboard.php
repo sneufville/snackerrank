@@ -50,13 +50,13 @@ $categories = get_categories();
 </head>
 <body>
 <div class="container">
+    <?php if ($flash_msg->hasErrors()): ?>
+      <?= $flash_msg->display(); ?>
+    <?php endif; ?>
     <?php if ($flash_msg->hasMessages()): ?>
         <?= $flash_msg->display(); ?>
     <?php endif; ?>
   <?php require_once('partials/admin_nav.php') ?>
-  <a href="index.php">SnackerRank Home</a>
-  <a href="dashboard_list_users.php">Manage Users</a>
-  <a href="logout.php">Logout</a>
   <h1>SnackerRank Admin Dashboard</h1>
   <div>
     <div class="flexRow">

@@ -60,9 +60,11 @@ if ($_POST && !empty($_POST['user_id']) && !empty($_POST['role'])) {
 <html lang="en">
 <head>
   <title>Edit User</title>
+  <?php require_once ('support/head_includes.php') ?>
 </head>
 <body>
-<div>
+<div class="container">
+    <?php require_once('partials/admin_nav.php') ?>
     <?php if ($flash_msg->hasErrors()): ?>
     <?= $flash_msg->display() ?>
     <?php endif; ?>
@@ -78,33 +80,34 @@ if ($_POST && !empty($_POST['user_id']) && !empty($_POST['role'])) {
           <label for="username">Username</label><br>
           <input type="text" id="username" value="<?= $user['username'] ?>" disabled>
         </div>
-        <hr>
-        <div class="formRow">
-          <label><input type="checkbox" name="update_password" id="updatePassword"> Update Password</label>
+        <div>
+          <label><input type="checkbox" name="update_password" id="updatePassword"> <span>Update Password</span></label>
         </div>
-        <div class="formRow">
+        <div class="input-field">
           <label for="newPassword">Update Password</label><br>
           <input type="password" name="new_password" id="newPassword" disabled>
         </div>
-        <div class="formRow">
-          <label for="user_role">Role</label><br>
-          <select name="role" id="user_role">
+        <div class="">
+          <label for="user_role">Role</label>
+          <select class="browser-default" name="role" id="user_role">
             <option value="">Select Role</option>
             <option value="user" <?= $user['role'] == 'user' ? 'selected' : '' ?>>User</option>
             <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Admin</option>
           </select>
         </div>
+        <br>
         <div class="formRow">
-          <button type="submit">Update User</button>
+          <button class="btn" type="submit">Update User</button>
         </div>
       </form>
       <br>
       <form action="dashboard_delete_user.php" method="post">
         <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-        <button type="submit">Delete User</button>
+        <button class="btn red" type="submit">Delete User</button>
       </form>
     <?php endif; ?>
 </div>
+<?php require_once ('support/body_script.php')?>
 <script type="application/javascript">
   const changePWCheckbox = document.querySelector("input[id=updatePassword]");
   const newPasswordInput = document.querySelector("input[id=newPassword]");

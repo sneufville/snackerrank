@@ -36,15 +36,7 @@ $is_admin = has_admin_session();
         <?= $flash_msg->display(); ?>
     <?php endif; ?>
 
-<!--    --><?php //if ($loggedIn): ?>
-<!--      <a href="logout.php">Logout</a>-->
-<!--    --><?php //else: ?>
-<!--      <a href="auth.php">Login</a>-->
-<!--    --><?php //endif; ?>
-    <?php if ($is_admin): ?>
-      <a class="brand-logo" href="admin_dashboard.php">Admin Dashboard</a>
-    <?php endif; ?>
-    <?php require('main_nav.php') ?>
+  <?php require('main_nav.php') ?>
   <h1>Welcome to SnackerRank</h1>
   <small>The ultimate snack ranking website ever made</small>
   <hr>

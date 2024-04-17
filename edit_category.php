@@ -70,24 +70,21 @@ if ($_POST && !empty($_POST['category_name']) && !empty($_POST['category_descrip
         <?php require_once('support/head_includes.php') ?>
     </head>
     <body>
-    <div>
-      <a href="index.php">Home</a><br>
-      <a href="admin_dashboard.php">Admin Dashboard</a><br>
-      <a href="search.php">Snack Listing</a>
-    </div>
+    <div class="container">
+    <?php require_once('partials/admin_nav.php') ?>
     <form action="" method="post">
         <div class="formRow">
             <label for="category_id">Category Id</label><br>
             <input type="text" disabled id="category_id" value="<?= $category_id ?>">
         </div>
-        <div class="formRow">
+        <div class="input-field">
             <label for="category_name">Category Name</label><br>
             <input type="text" class="formInput" id="category_name" name="category_name" value="<?= $category['category_name'] ?>">
             <?php if ($_POST && !is_null($category_name_error)): ?>
               <p class="formError"><?= $category_name_error ?></p>
             <?php endif; ?>
         </div>
-        <div class="formRow">
+        <div class="input-field">
             <label for="category_description">Category Description</label><br>
             <textarea name="category_description" id="category_description" cols="30" rows="10"
                       class="formInput"><?= $category['category_description'] ?></textarea>
@@ -96,13 +93,15 @@ if ($_POST && !empty($_POST['category_name']) && !empty($_POST['category_descrip
             <?php endif; ?>
         </div>
         <div class="formRow">
-            <button type="submit">Update Category</button>
+            <button class="btn" type="submit">Update Category</button>
         </div>
     </form>
     <br>
     <form action="delete_category.php" method="post">
         <input type="hidden" name="category_id" value="<?= $category_id ?>">
-        <button type="submit">Delete Category</button>
+        <button class="btn red" type="submit">Delete Category</button>
     </form>
+    </div>
+    <?php require_once('support/body_script.php') ?>
     </body>
 </html>

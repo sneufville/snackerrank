@@ -1,21 +1,12 @@
 <?php
+use Plasticbrain\FlashMessages\FlashMessages;
 
 require_once ('db_connect.php');
+require_once ('auth_helpers.php');
 session_start();
-if (!array_key_exists('current_user', $_SESSION)) {
-    header("Location: index.php");
-    exit;
-}
+admin_auth_guard();
 
-if (!array_key_exists('user_role', $_SESSION)) {
-    header("Location: index.php");
-    exit;
-}
-
-if ($_SESSION['user_role'] != 'admin') {
-    header("Location: index.php");
-    exit;
-}
+$flash_msg = new FlashMessages();
 
 $category_name_error = null;
 $category_description_error = null;
@@ -25,7 +16,8 @@ if ($_POST && !empty($_POST['category_name']) && !empty($_POST['category_descrip
   $category_description = filter_input(INPUT_POST, 'category_description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
   if (strlen($category_name) < 3 || strlen($category_description) < 10) {
-    header("Location: category_form.php");
+//    header("Location: category_form.php");
+    $flash_msg->error("There were problems with your submission", "category_form.php");
     exit;
   }
 
@@ -35,14 +27,14 @@ if ($_POST && !empty($_POST['category_name']) && !empty($_POST['category_descrip
   $statement->bindValue(':category_name', $category_name);
   $statement->bindValue(':category_description', $category_description);
   if ($statement->execute()) {
-    header('Location: admin_dashboard.php');
+    $flash_msg->success("Category created successfully", "admin_dashboard.php");
     exit;
   }
 } else {
   $category_name = null;
   $category_description = null;
-  $category_name_error = empty($_POST['category_name']) || strlen(trim($_POST['category_name'])) == 0 ? 'Must be at least 3 characters': null;
-  $category_description_error = empty($_POST['category_description']) || strlen(trim($_POST['category_description'])) == 0 ? 'Must be at least 10 characters' : null;
+//  $category_name_error = empty($_POST['category_name']) || strlen(trim($_POST['category_name'])) == 0 ? 'Must be at least 3 characters': null;
+//  $category_description_error = empty($_POST['category_description']) || strlen(trim($_POST['category_description'])) == 0 ? 'Must be at least 10 characters' : null;
 }
 
 ?>
@@ -51,31 +43,31 @@ if ($_POST && !empty($_POST['category_name']) && !empty($_POST['category_descrip
 <html lang="en">
 <head>
     <title>Snack Category</title>
+  <?php require_once ('support/head_includes.php')?>
 </head>
 <body>
-<div>
-  <a href="index.php">Home</a><br>
-  <a href="admin_dashboard.php">Admin Dashboard</a><br>
-  <a href="search.php">Snack Listing</a>
-</div>
+<div class="container">
+<?php require_once('partials/admin_nav.php') ?>
 <form action="" method="post">
-    <div class="formRow">
+    <div class="input-field">
       <label for="category_name">Category Name</label><br>
       <input type="text" name="category_name" id="category_name" class="formInput" value="<?= $_POST['category_name'] ?? $category_name ?>">
       <?php if ($category_name_error): ?>
       <p class="formError"><?= $category_name_error ?></p>
       <?php endif; ?>
     </div>
-  <div class="formRow">
+  <div class="input-field">
     <label for="category_description">Category Description</label><br>
-    <textarea name="category_description" id="category_description" cols="30" rows="10" class="formInput"><?= $_POST['category_description'] ?? $category_description ?></textarea>
+    <textarea name="category_description" id="category_description" cols="30" rows="10" class="formInput materialize-textarea"><?= $_POST['category_description'] ?? $category_description ?></textarea>
       <?php if ($category_description_error): ?>
         <p class="formError"><?= $category_description_error ?></p>
       <?php endif; ?>
   </div>
   <div class="formRow">
-    <button type="submit">Save</button>
+    <button class="btn" type="submit">Save</button>
   </div>
 </form>
+</div>
+<?php require_once ('support/body_script.php')?>
 </body>
 </html>

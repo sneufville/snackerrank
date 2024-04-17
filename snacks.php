@@ -23,7 +23,7 @@ if (is_int($category_id)) {
 
 $statement->execute();
 $snacks = $statement->fetchAll();
-$active_category = null;
+$active_category = ['id' => null, 'category_name' => null];
 
 foreach ($categories as $category) {
     if ($category['id'] == $category_id) {
@@ -44,13 +44,18 @@ foreach ($categories as $category) {
 <body>
 <div class="container">
     <?php require('main_nav.php') ?>
-    <?php require('category_nav.php') ?>
   <div>
-      <?php if (!is_null($active_category)): ?>
-        <p>Showing <strong><?= $active_category['category_name'] ?></strong> snacks</p>
-      <?php else: ?>
-        <p>Showing <strong>All</strong> Snacks</p>
-      <?php endif; ?>
+    <form action="" id="snack_filter_form" method="get">
+      <label for="category_id">Snack Category</label>
+      <select class="browser-default" name="snack_category" id="category_id">
+        <option value="">All Snacks</option>
+        <?php if (!is_null($categories)): ?>
+        <?php foreach($categories as $category): ?>
+          <option <?= $active_category['id'] == $category['id'] ? 'selected' : '' ?> value="<?= $category['id'] ?>"><?= $category['category_name'] ?></option>
+        <?php endforeach; ?>
+        <?php endif; ?>
+      </select>
+    </form>
       <?php if (count($snacks) > 0): ?>
           <?php foreach ($snacks as $snack): ?>
           <div class="card-panel">
@@ -69,5 +74,13 @@ foreach ($categories as $category) {
   </div>
 </div>
 <?php require_once('support/body_script.php') ?>
+<script>
+  const snackFilterForm = document.querySelector('#snack_filter_form');
+  const categorySelect = document.querySelector('#category_id');
+  categorySelect.addEventListener('change', event => {
+    console.log('event: ', event.target.value);
+    snackFilterForm.submit();
+  })
+</script>
 </body>
 </html>
