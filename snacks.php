@@ -1,23 +1,55 @@
 <?php
+require_once (__DIR__ . '/vendor/autoload.php');
+use Plasticbrain\FlashMessages\FlashMessages;
 require_once('db_connect.php');
 require_once('search_helpers.php');
 
 session_start();
+$flash_msg = new FlashMessages();
 
 $categories = get_categories();
+$current_user = $_SESSION['current_user'] ?? null;
+const VALID_SORT_OPTIONS = ['category_id', 'snack_name', 'last_updated'];
+const VALID_SORT_DIRECTIONS = ['asc', 'desc'];
 
 global $db;
 
 $category_id = filter_input(INPUT_GET, 'snack_category', FILTER_VALIDATE_INT);
+$sort_by = filter_input(INPUT_GET, 'sort_by', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$sort_direction = filter_input(INPUT_GET, 'sort_dir', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 $query_string = "SELECT s.id, category_id, snack_name, snack_description, s.last_updated, category_name FROM snacks s INNER JOIN snack_categories sc ON s.category_id = sc.id";
 
 if (is_int($category_id)) {
-    $query_string .= " WHERE category_id = :category_id ORDER BY snack_name";
+    if (!is_null($current_user)) {
+      // check the sort by field and direction
+        if (!in_array($sort_by, VALID_SORT_OPTIONS)) {
+//          $flash_msg->error("Invalid sort by option given", "snacks.php");
+            $sort_by = 'snack_name';
+        }
+        if (!in_array($sort_direction, VALID_SORT_DIRECTIONS)) {
+          $sort_direction = 'asc';
+        }
+        $query_string .= " WHERE category_id = :category_id ORDER BY $sort_by $sort_direction";
+        //        $statement->bindParam(':sort_field', $sort_by);
+//        $statement->bindParam(':sort_direction', $sort_direction);
+    } else {
+        $query_string .= " WHERE category_id = :category_id";
+    }
     $statement = $db->prepare($query_string);
     $statement->bindValue(':category_id', $category_id);
 } else {
-    $query_string .= " ORDER BY snack_name";
+    if (!is_null($current_user)) {
+        // check the sort by field and direction
+        if (!in_array($sort_by, VALID_SORT_OPTIONS)) {
+            $sort_by = 'snack_name';
+        }
+        if (!in_array($sort_direction, VALID_SORT_DIRECTIONS)) {
+            $sort_direction = 'asc';
+        }
+        // we are only allowing specific values
+        $query_string .= " ORDER BY $sort_by $sort_direction";
+    }
     $statement = $db->prepare($query_string);
 }
 
@@ -44,6 +76,12 @@ foreach ($categories as $category) {
 <body>
 <div class="container">
     <?php require('main_nav.php') ?>
+  <?php if($flash_msg->hasErrors()): ?>
+  <?= $flash_msg->display() ?>
+  <?php endif; ?>
+    <?php if($flash_msg->hasMessages()): ?>
+        <?= $flash_msg->display() ?>
+    <?php endif; ?>
   <div>
     <form action="" id="snack_filter_form" method="get">
       <label for="category_id">Snack Category</label>
@@ -55,6 +93,22 @@ foreach ($categories as $category) {
         <?php endforeach; ?>
         <?php endif; ?>
       </select>
+      <br>
+        <?php if(!is_null($current_user)): ?>
+          <label for="sort_by">Sort By</label>
+          <select name="sort_by" id="sort_by" class="browser-default">
+            <option value="" disabled>--</option>
+            <option value="snack_name" <?= !empty($_GET['sort_by']) && $_GET['sort_by'] == 'snack_name' ? 'selected' : '' ?> >Snack Name</option>
+            <option value="category_id" <?= !empty($_GET['sort_by']) && $_GET['sort_by'] == 'category_id' ? 'selected' : '' ?>>Snack Category</option>
+            <option value="last_updated" <?= !empty($_GET['sort_by']) && $_GET['sort_by'] == 'last_updated' ? 'selected' : '' ?>>Last Updated</option>
+          </select>
+          <label for="sort_dir">Sorting Order</label>
+          <select name="sort_dir" id="sort_dir" class="browser-default">
+            <option value="asc"  <?= !empty($_GET['sort_dir']) && $_GET['sort_dir'] == 'asc' ? 'selected' : '' ?>>Ascending Order</option>
+            <option value="desc" <?= !empty($_GET['sort_dir']) && $_GET['sort_dir'] == 'desc' ? 'selected' : '' ?>>Descending Order</option>
+          </select>
+          <button type="submit">Apply Sort & Filter</button>
+        <?php endif; ?>
     </form>
       <?php if (count($snacks) > 0): ?>
           <?php foreach ($snacks as $snack): ?>

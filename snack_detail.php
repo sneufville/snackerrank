@@ -2,6 +2,7 @@
 require_once(__DIR__ . '/vendor/autoload.php');
 require_once('db_connect.php');
 require_once('search_helpers.php');
+require_once('helpers/format_helpers.php');
 
 use Plasticbrain\FlashMessages\FlashMessages;
 
@@ -29,11 +30,13 @@ $commenter_name_error = null;
 $commenter_email_error = null;
 $comment_text_error = null;
 
-if ($_POST && (!is_null($current_user) || !empty($_POST['commenter_name'])) && !empty($_POST['comment_text'])) {
-    if ($current_user) {
+if ($_POST && !empty($_POST['comment_text'])) {
+    if (!is_null($current_user)) {
       $commenter_name = $current_user;
-    } else {
+    } elseif(!empty($_POST['commenter_name'])) {
         $commenter_name = filter_input(INPUT_POST, 'commenter_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    } else {
+      $commenter_name = 'snack-lover';
     }
 //    $commenter_email = filter_input(INPUT_POST, 'commenter_email', FILTER_VALIDATE_EMAIL);
     $comment_text = filter_input(INPUT_POST, 'comment_text', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -118,9 +121,13 @@ if ($_POST && (!is_null($current_user) || !empty($_POST['commenter_name'])) && !
       </div>
       <h3>Snack Images</h3>
       <?php if (count($item_images) > 0): ?>
+        <div class="row">
         <?php foreach($item_images as $image): ?>
+        <div class="col s4">
             <img alt="<?= $image['image_title'] ?>" class="responsive-img" src="<?= $image['image_path'] ?>">
+        </div>
         <?php endforeach; ?>
+        </div>
       <?php else: ?>
         <div class="noResultsContainer noResultsContainer_Row">
           <i class="material-icons fitContent">info</i>
@@ -134,7 +141,7 @@ if ($_POST && (!is_null($current_user) || !empty($_POST['commenter_name'])) && !
       <div class="noResultContainer">
         <h1>Uh oh</h1>
         <p>We couldn't find the snack you were looking for</p>
-        <a href="search.php">Back to Search</a>
+        <a href="snacks.php">Back to Search</a>
       </div>
     <?php endif; ?>
   <div>
@@ -151,13 +158,13 @@ if ($_POST && (!is_null($current_user) || !empty($_POST['commenter_name'])) && !
                value="<?= $_POST['commenter_name'] ?? $commenter_name ?>">
         <?php endif; ?>
       </div>
-      <div class="formRow input-field">
-        <?php if(is_null($current_user)): ?>
-        <label for="commenter_email">Your Email (optional)</label><br>
-        <input type="email" name="commenter_email" id="commenter_email" placeholder="john.battman@example.ca"
-               value="<?= $_POST['commenter_email'] ?? $commenter_email ?>">
-        <?php endif; ?>
-      </div>
+<!--      <div class="formRow input-field">-->
+<!--        --><?php //if(is_null($current_user)): ?>
+<!--        <label for="commenter_email">Your Email (optional)</label><br>-->
+<!--        <input type="email" name="commenter_email" id="commenter_email" placeholder="john.battman@example.ca"-->
+<!--               value="--><?php //= $_POST['commenter_email'] ?? $commenter_email ?><!--">-->
+<!--        --><?php //endif; ?>
+<!--      </div>-->
       <div class="formRow input-field">
         <label for="comment_text">Your comment</label><br>
         <textarea
@@ -178,7 +185,7 @@ if ($_POST && (!is_null($current_user) || !empty($_POST['commenter_name'])) && !
           <div class="comment">
             <blockquote class="flow-text"><?= $comment['comment_text'] ?></blockquote>
             <label><?= $comment['commenter_name'] ?> - <?= $comment['commenter_email_address'] ?></label>
-            <label><?= $comment['last_updated'] ?></label>
+            <label><?= format_timestamp($comment['last_updated']) ?></label>
             <hr>
           </div>
           <?php endforeach; ?>
